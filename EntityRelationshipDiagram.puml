@@ -1,0 +1,51 @@
+@startuml
+' hide the spot
+hide circle
+
+
+' avoid problems with angled crows feet
+skinparam linetype ortho
+
+
+entity "Nutriente" as nutrient {
+  *nutriente_id : number <<PK>>
+  --
+  *nombre : text
+  *unidad : text
+}
+entity "Alimento" as alimento {
+  *alimento_id : number <<PK>>
+  --
+  *nombre : text
+}
+entity "Alimento_Nutriente" as AN{
+  *alimento_id : number <<FK>>
+  *nutriente_id : number <<FK>>
+  *cantidad : number
+}
+
+
+'
+
+
+entity "RegistroAlimentario" as RA{
+    *registro_alimentario_id : number <<PK>>
+    --
+    *alimento_id : number <<FK>>
+    *fecha : date
+    *hora : time
+    *cantidad : number
+}
+note bottom
+En el futuro se puede guardar el usuario.
+end note
+
+
+
+
+alimento ||--o{ AN
+nutrient ||--o{ AN
+alimento ||--o{ RA
+
+
+@enduml

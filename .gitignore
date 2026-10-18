@@ -1,0 +1,35 @@
+## --- .NET Core / C# Build Artifacts ---
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## --- Environment & Secrets ---
+# Keep your database credentials safe!
+.env
+.env.*
+!.env.example
+
+## --- Visual Studio / IDE Files ---
+.vs/
+.vscode/
+.idea/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+## --- Rider / JetBrains ---
+*.DotSettings.user
+
+## --- OS Generated Files ---
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+## --- Test Results & Coverage ---
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.visualstudio.diagnostics
