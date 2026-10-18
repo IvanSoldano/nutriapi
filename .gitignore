@@ -9,6 +9,9 @@
 .env
 .env.*
 !.env.example
+appsettings.json
+appsettings.Development.json
+!appsettings.example.json
 
 ## --- Visual Studio / IDE Files ---
 .vs/
