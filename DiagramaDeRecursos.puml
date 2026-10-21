@@ -1,0 +1,32 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+package "API /api/registros" {
+  class "Endpoints" as Endpoints << (E,#FF7700) >> {
+    + GET /api/registros?fecha={f}&page={p}
+    + GET /api/registros/nutrientes?fecha={f}
+    + POST /api/registros
+    + PUT /api/registros/{id}
+    + DELETE /api/registros/{id}
+  }
+
+  class "CrearRegistroRequest (DTO)" as PostDTO << (D,#77AAFF) >> {
+    + alimentoId : int
+    + fecha : Date
+    + hora : Time
+    + cantidadGramos : decimal
+  }
+
+  class "NutrientesTotalesResponse (DTO)" as NutrientesDTO << (D,#77AAFF) >> {
+    + fecha : Date
+    + calorias : decimal
+    + proteinas : decimal
+    + carbohidratos : decimal
+    + grasas : decimal
+  }
+}
+
+Endpoints ..> PostDTO : Recibe en POST/PUT
+Endpoints ..> NutrientesDTO : Retorna en GET
+@enduml

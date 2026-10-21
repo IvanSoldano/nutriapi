@@ -1,0 +1,62 @@
+@startuml
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+package "Presentación (Minimal API)" {
+  class "RegistrosEndpoints" as Endpoints <<static>> {
+    + {static} MapRegistrosEndpoints(app)
+  }
+}
+
+package "Capa de Negocio / Servicios" {
+  interface "INutricionService" as IService {
+    + ObtenerResumenDiaAsync(fecha: DateOnly) : Task<ResumenNutricionalDto>
+    + GuardarConsumoAsync(dto: GuardarRegistroDto) : Task<int>
+  }
+
+  class "NutricionService" as Service {
+    - _repo : IRegistrosRepository
+    + ObtenerResumenDiaAsync(...)
+    + GuardarConsumoAsync(...)
+  }
+}
+
+package "Capa de Datos (Acceso a BD)" {
+  interface "IRegistrosRepository" as IRepo {
+    + GetAlimentosDelDiaAsync(fecha: DateOnly) : Task<List<AlimentoConsumido>>
+    + InsertarRegistroAsync(dto: GuardarRegistroDto) : Task<int>
+    + DeleteRegistroAsync(id: int) : Task<bool>
+  }
+
+  class "RegistrosRepository" as Repo {
+    - _connectionString : string
+    + GetAlimentosDelDiaAsync(...)
+    + InsertarRegistroAsync(...)
+    + DeleteRegistroAsync(...)
+  }
+}
+
+package "Modelos / DTOs (Records)" {
+  class "GuardarRegistroDto" as DtoGuardar <<record>> {
+    + alimentoId : int
+    + fecha : DateOnly
+    + hora : TimeOnly
+    + cantidadGramos : decimal
+  }
+
+  class "AlimentoConsumido" as DtoConsumo <<record>> {
+    + registroAlimentarioId : int
+    + alimento : string
+    + cantidadGramos : decimal
+  }
+}
+
+' Relaciones y Dependencias
+Endpoints ..> IService : Inyecta / Usa
+Service .up.|> IService : Implementa
+Service ..> IRepo : Inyecta / Usa
+Repo .up.|> IRepo : Implementa
+
+Service ..> DtoGuardar : Procesa
+Repo ..> DtoConsumo : Retorna
+@enduml

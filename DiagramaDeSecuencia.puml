@@ -1,0 +1,27 @@
+@startuml
+autonumber
+actor "Cliente HTTP" as Client
+boundary "Registros API" as API
+control "RegistrosRepository" as Repo
+database "PostgreSQL" as DB
+
+Client -> API : POST /api/registros (alimentoId, fecha, cantidadGramos)
+activate API
+
+API -> API : Validar campos requeridos
+alt Datos inválidos
+    API --> Client : 400 Bad Request {"error": "..."}
+else Datos válidos
+    API -> Repo : CreateAsync(registroDto)
+    activate Repo
+    Repo -> DB : INSERT INTO registro_alimentario ...
+    activate DB
+    DB --> Repo : nuevo_id = 42
+    deactivate DB
+    Repo --> API : RegistroCreado
+    deactivate Repo
+    API --> Client : 201 Created (Location: /api/registros/42)
+end
+
+deactivate API
+@enduml
