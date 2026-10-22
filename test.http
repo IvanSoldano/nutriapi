@@ -2,22 +2,27 @@
 
 ### 1. Test PostgreSQL connection
 GET {{test_HostAddress}}/api/registros/test-db
+X-Api-Key: {{apiKey}}
 Accept: application/json
 
 ### 2. Get paginated list of foods consumed (Page 1, 10 items)
 GET {{test_HostAddress}}/api/registros?fecha=2026-10-15&page=1&pageSize=10
+X-Api-Key: {{apiKey}}
 Accept: application/json
 
 ### 3. Get total calculated nutrients consumed on a date
 GET {{test_HostAddress}}/api/registros/nutrientes?fecha=2026-10-15
+X-Api-Key: {{apiKey}}
 Accept: application/json
 
 ### 4. [PLACEHOLDER] Get calculated nutrients for date range
 GET {{test_HostAddress}}/api/registros/nutrientes/rango?fechaInicio=2026-10-01&fechaFin=2026-10-15
+X-Api-Key: {{apiKey}}
 Accept: application/json
 
 ### 5. Create a new food record (POST)
 POST {{test_HostAddress}}/api/registros
+X-Api-Key: {{apiKey}}
 Content-Type: application/json
 
 {
@@ -30,6 +35,7 @@ Content-Type: application/json
 ### 6. Update an existing food record (PUT)
 # Replace '1' with an existing registro_alimentario_id
 PUT {{test_HostAddress}}/api/registros/1
+X-Api-Key: {{apiKey}}
 Content-Type: application/json
 
 {
@@ -42,4 +48,5 @@ Content-Type: application/json
 ### 7. Delete a food record (DELETE)
 # Replace '1' with the registro_alimentario_id to delete
 DELETE {{test_HostAddress}}/api/registros/1
+X-Api-Key: {{apiKey}}
 Accept: application/json

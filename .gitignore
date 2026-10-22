@@ -12,10 +12,10 @@
 appsettings.json
 appsettings.Development.json
 !appsettings.example.json
-
 ## --- Visual Studio / IDE Files ---
 .vs/
-.vscode/
+.vscode/*
+!.vscode/settings.example.json
 .idea/
 *.user
 *.userosscache

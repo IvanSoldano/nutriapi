@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using test.Repositories;
 
 namespace test.Endpoints;
@@ -6,7 +8,35 @@ public static class RegistrosEndpoints
 {
     public static void MapRegistrosEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/registros");
+        var group = app.MapGroup("/api/registros")
+            .AddEndpointFilter(async (context, next) =>
+            {
+                var config = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
+                var expectedKey = config["Authentication:ApiKey"];
+
+                if (!context.HttpContext.Request.Headers.TryGetValue("X-Api-Key", out var extractedKey))
+                {
+                    return Results.Json(new
+                    {
+                        success = false,
+                        message = "Missing 'X-Api-Key' header."
+                    }, statusCode: StatusCodes.Status401Unauthorized);
+                }
+
+                var expectedBytes = Encoding.UTF8.GetBytes(expectedKey ?? string.Empty);
+                var extractedBytes = Encoding.UTF8.GetBytes(extractedKey.ToString());
+
+                if (expectedBytes.Length == 0 || !CryptographicOperations.FixedTimeEquals(expectedBytes, extractedBytes))
+                {
+                    return Results.Json(new
+                    {
+                        success = false,
+                        message = "Invalid API Key."
+                    }, statusCode: StatusCodes.Status401Unauthorized);
+                }
+
+                return await next(context);
+            });
 
         // GET /api/registros/test-db
         group.MapGet("/test-db", async (RegistrosRepository repo) =>
